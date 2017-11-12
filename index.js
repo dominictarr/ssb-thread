@@ -41,7 +41,11 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
   }
 
   sbot.get(root, function (err, value) {
-    if (err) return cb(err)
+    if (err) {
+      console.error('could not get root message', root)
+      console.error(error)
+      return
+    }
     update({key: root, value: value})
   })
 
@@ -57,5 +61,4 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
     })
   )
 }
-
 
