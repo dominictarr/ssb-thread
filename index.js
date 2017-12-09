@@ -47,18 +47,23 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
       return
     }
     update({key: root, value: value})
+
+    if(value.content.root)
+      root = value.content.root
+    pull(
+      sbot.links({
+        rel: 'root', dest: root,
+        values: true, keys: true,
+        live: true
+      }),
+      pull.drain(function (msg) {
+        if(msg.sync) return
+        update(msg)
+      })
+    )
+
   })
 
-  pull(
-    sbot.links({
-      rel: 'root', dest: root,
-      values: true, keys: true,
-      live: true
-    }),
-    pull.drain(function (msg) {
-      if(msg.sync) return
-      update(msg)
-    })
-  )
 }
+
 
