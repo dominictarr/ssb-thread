@@ -10,7 +10,9 @@
   "dependencies": {
     "ssb-sort": "0.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ssb-client": "^4.5.7"
+  },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
