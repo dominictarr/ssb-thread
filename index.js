@@ -23,10 +23,10 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
     ary.forEach(function (msg) {
       //retrive out of order messages...
       toArray(msg.value.content.branch).forEach(function (id) {
-        
-        if(!lookup[id]) {
+       if(!lookup[id]) {
           lookup[id] = true
-          sbot.get(id, function (err, msg) {
+          var _id = id
+          sbot.get({id:id, private: true}, function (err, msg) {
             if(msg) update({key: id, value: msg, ooo: true})
           })
         }
@@ -40,7 +40,7 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
     }, 50)
   }
 
-  sbot.get(root, function (err, value) {
+  sbot.get({id:root, private: true}, function (err, value) {
     if (err) {
       console.error('could not get root message', root)
       console.error(err)
@@ -50,14 +50,16 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
 
     if(value.content.root)
       root = value.content.root
+
     pull(
       sbot.links({
         rel: 'root', dest: root,
         values: true, keys: true,
-        live: true
+        live: true, private: true
       }),
       pull.drain(function (msg) {
         if(msg.sync) return
+        if(msg.key === msg.value.content.branch) throw new Error('cannot point to self')
         update(msg)
       })
     )
@@ -65,5 +67,4 @@ module.exports = function getThread (sbot, unbox, root, onThread) {
   })
 
 }
-
 
