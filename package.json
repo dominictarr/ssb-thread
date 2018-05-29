@@ -8,7 +8,7 @@
     "url": "git://github.com/dominictarr/ssb-thread.git"
   },
   "dependencies": {
-    "ssb-sort": "0.0.0"
+    "ssb-sort": "^1.1.0"
   },
   "devDependencies": {
     "ssb-client": "^4.5.7"
